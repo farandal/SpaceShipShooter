@@ -1,4 +1,5 @@
 .vscode
 Logs
 Temp
+Library
 Assets/**/*.meta
