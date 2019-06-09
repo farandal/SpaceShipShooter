@@ -4,20 +4,15 @@ using System.Collections;
 public class Chunk
 {
     float[,,] data;
-
     int size;
     int height;
-
     float xOrigin;
     float yOrigin;
     float zOrigin;
-
     float surfaceCrossValue;
     float noiseScaleFactor;
-
     Mesh mesh;
     MeshFilter meshFilter;
-
     public GameObject meshGameObject;
 
     public Chunk(float x, float y, float z, int size, int height, float surfaceCrossValue, float noiseScaleFactor, Material material, GameObject parent)
@@ -31,7 +26,6 @@ public class Chunk
         this.zOrigin = z;
         this.surfaceCrossValue = surfaceCrossValue;
         this.noiseScaleFactor = noiseScaleFactor;
-
         meshGameObject = new GameObject("Chunk" + x + "," + y + "," + z, typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider));
         meshGameObject.transform.position = new Vector3(x, y, z);
         meshGameObject.transform.SetParent (parent.transform,false);
@@ -42,7 +36,6 @@ public class Chunk
         meshGameObject.GetComponent<MeshFilter>().mesh = mesh;
         meshGameObject.GetComponent<MeshCollider>().sharedMesh = mesh;
         meshGameObject.GetComponent<MeshRenderer>().material = material;
-        
     }
 
     void FillData()
@@ -74,7 +67,7 @@ public class Chunk
                     float dataZ = (zOrigin + z) / noiseScaleFactor;
 
                     data[x, y, z] = Mathf.PerlinNoise(dataY, dataX + dataZ) - Mathf.PerlinNoise(dataX, dataZ);
-                    //data[x, y, z] += 1 - 2 * y / (float)height; //big hill
+                    data[x, y, z] += 1 - 2 * y / (float)height; //big hill
                     data[x, y, z] += 1 - (2 * y / (float)height) * (Mathf.PerlinNoise(dataY, dataX + dataZ) + 1); //small hill
                 }
             }

@@ -22,7 +22,7 @@ public class TerrainMesh
                 {
                     Vector3 basePoint = new Vector3(x, y, z);
 
-                    // Recuperer les 8 points du cube
+                    // 8 faces of the cube
                     
                     float p0 = data[x, y, z];
                     float p1 = data[x+1, y, z];
@@ -33,8 +33,9 @@ public class TerrainMesh
                     float p6 = data[x, y+1, z+1];
                     float p7 = data[x+1, y+1, z+1];
 
-                    /* effet cubique
-                    if (data[x, y, z] >= 0)
+                    
+                    // effet cubique
+                    /* if (data[x, y, z] >= 0)
                         p0 = 1;
                     else
                         p0 = -1;
@@ -161,16 +162,23 @@ public class TerrainMesh
 
                     for (int i = 0; Contouring3D.TriangleLookupTable[crossBitMap, i] != -1; i += 3)
                     {
-                        int index1 = Contouring3D.TriangleLookupTable[crossBitMap, i];
+                        
+                     int index1 = Contouring3D.TriangleLookupTable[crossBitMap, i];
                         int index2 = Contouring3D.TriangleLookupTable[crossBitMap, i+1];
                         int index3 = Contouring3D.TriangleLookupTable[crossBitMap, i+2];
 
                         vertices.Add(new Vector3(interpolatedValues[index1].x, interpolatedValues[index1].y, interpolatedValues[index1].z));
                         vertices.Add(new Vector3(interpolatedValues[index2].x, interpolatedValues[index2].y, interpolatedValues[index2].z));
                         vertices.Add(new Vector3(interpolatedValues[index3].x, interpolatedValues[index3].y, interpolatedValues[index3].z));
+                        
                         triangles.Add(nTriangle++);
                         triangles.Add(nTriangle++);
                         triangles.Add(nTriangle++);
+                        
+                        uvs.Add(new Vector2(interpolatedValues[index1].x / (float)size, interpolatedValues[index1].z / (float)size));
+                        uvs.Add(new Vector2(interpolatedValues[index2].x / (float)size, interpolatedValues[index2].z / (float)size));
+                        uvs.Add(new Vector2(interpolatedValues[index3].x / (float)size, interpolatedValues[index3].z / (float)size));
+                    
                     }
                 }
             }
@@ -178,8 +186,11 @@ public class TerrainMesh
 
         meshToUpdate.vertices = vertices.ToArray();
         meshToUpdate.triangles = triangles.ToArray();
+        meshToUpdate.uv =  uvs.ToArray();
         meshToUpdate.RecalculateNormals();
         meshToUpdate.RecalculateBounds();
+        //meshToUpdate.RecalculateTangents();
+        
     }
 
 }
