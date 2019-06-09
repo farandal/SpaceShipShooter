@@ -7,10 +7,11 @@ public class AppState {
   private GameObject hudCameraContainer;
   public GameObject rootGameObject;
   private float cameradistance = 800f;
-  private float cameraAltitud = 2500f;
-  private float playerAltitud = 2500f;
-  private float terrainScale = 100f;
+  private float cameraAltitud = 1000f;
+  private float playerAltitud = 1200;
+  private float terrainScale = 10f;
   private float farClipPlane = 100000f;
+
 
   [RuntimeInitializeOnLoadMethod]
   static void OnRuntimeMethodLoad () {
@@ -26,7 +27,7 @@ public class AppState {
     // Find the 'main' camera object.
     var original = Camera.main;
 
-     mainCameraContainer = new GameObject {
+    mainCameraContainer = new GameObject {
       name = "MainCameraContainer"
     };
     // Create new cameras to use, copying from the main camera  
@@ -36,7 +37,7 @@ public class AppState {
       Quaternion.FromToRotation (new Vector3 (0, 0, 0), new Vector3 (0, 0, 0)));
     _cam1.transform.SetParent (mainCameraContainer.transform, false);
 
-     hudCameraContainer = new GameObject {
+    hudCameraContainer = new GameObject {
       name = "hudCameraContainer"
     };
     Camera _cam2 = (Camera) Object.Instantiate (
@@ -54,7 +55,7 @@ public class AppState {
 
     // Camera 2 is a minimap, so disable the audio listener and make it small
     var fullScreen = _cam1.pixelRect;
-    _cam2.pixelRect = new Rect (fullScreen.xMin, fullScreen.yMin, fullScreen.width * 0.2f, fullScreen.height * 0.2f);
+    _cam2.pixelRect = new Rect (fullScreen.xMin, fullScreen.yMin, fullScreen.width * 0.33f, fullScreen.height * 0.33f);
 
     // Enable cameras!
     _cam1.enabled = true;
@@ -68,13 +69,18 @@ public class AppState {
 
     _cam1.fieldOfView = 66.0f;
     _cam1.farClipPlane = farClipPlane;
-    
+
     //_cam1.transform.position = new Vector3 (0f, cameraAltitud, -cameradistance);
-    //mainCameraContainer.transform.position = new Vector3 (0f, cameraAltitud, -cameradistance);
-    
-    _cam2.transform.position = new Vector3 (0f, cameraAltitud, -cameradistance);
+    mainCameraContainer.transform.position = new Vector3 (0f, cameraAltitud, -cameradistance);
+
+    _cam2.transform.eulerAngles = new Vector3 (90.0f, _cam2.transform.eulerAngles.y, _cam2.transform.eulerAngles.z);
+    _cam2.transform.position = new Vector3 (0f, cameraAltitud-200, cameradistance/2);
+    _cam2.farClipPlane = farClipPlane;
 
     _cam1.cullingMask = 1;
+    _cam2.cullingMask = 5 ;
+
+    _cam1.clearFlags = CameraClearFlags.Depth;
     _cam2.clearFlags = CameraClearFlags.Depth;
 
   }
@@ -103,23 +109,27 @@ public class AppState {
       name = "PlayerContainer"
     };
 
+    playerContainer.transform.SetParent (rootGameObject.transform, false);
+    playerContainer.AddComponent<PlayerMovement> ();
     playerContainer.AddComponent<Plane> ();
-
     playerContainer.transform.position = new Vector3 (0f, playerAltitud, 0f);
-    //playerContainer.transform.Translate (0f,playerAltitud, 0f);
+    playerContainer.transform.Translate (0f,playerAltitud, 0f);
 
     GameObject world = new GameObject {
       name = "World"
     };
 
-    world.AddComponent<World> ();
-
-    playerContainer.transform.SetParent (rootGameObject.transform, false);
+    World terrain = world.AddComponent<World> ();
+    terrain.SetScaleFactor (100f);
     world.transform.SetParent (rootGameObject.transform, false);
-    world.transform.localScale = new Vector3 (terrainScale, terrainScale, terrainScale);
+    world.layer = 6;
 
-    SmoothFollow sf = mainCameraContainer.AddComponent<SmoothFollow> () as SmoothFollow;
-    sf.SetTarget (playerContainer);
+    SmoothFollow followCam1 = this.mainCameraContainer.AddComponent<SmoothFollow> () as SmoothFollow;
+    SmoothFollow followCam2 = this.hudCameraContainer.AddComponent<SmoothFollow> () as SmoothFollow;
+  
+    followCam1.SetTarget(playerContainer);
+    followCam2.SetTarget(playerContainer);
+    terrain.SetPlayer (playerContainer);
 
   }
 

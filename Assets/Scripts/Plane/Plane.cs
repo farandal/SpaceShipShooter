@@ -16,7 +16,6 @@ public class Plane : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-
     }
 
     private void ImportPlane () {
@@ -43,8 +42,6 @@ public class Plane : MonoBehaviour {
 
         Vector3 correctionVector = new Vector3 (90f, 0f, 0f);
 
-      
-
         //playerContainer.transform.position = new Vector3 (0f, playerAltitud, 0f);
         //playerContainer.transform.Translate (0f,playerAltitud, 0f);
 
@@ -53,7 +50,7 @@ public class Plane : MonoBehaviour {
         Gizmo gizmo = gameObject.AddComponent<Gizmo> ();
         gizmo.SetCorrectionVector (correctionVector);
         gizmo.SetTarget (plane);
-
+        
         GameObject buster1 = GameObject.Instantiate (GameObject.Find ("Particles/Burster")) as GameObject;
         GameObject buster2 = GameObject.Instantiate (GameObject.Find ("Particles/Burster")) as GameObject;
 
@@ -74,10 +71,10 @@ public class Plane : MonoBehaviour {
 
         buster1.transform.SetParent (plane.transform, false);
         buster2.transform.SetParent (plane.transform, false);
-
         plane.AddComponent<Pulse> ();
-        //playerContainer.transform.localScale = new Vector3(0.1f,0.1f, 0.1f);
+    
 
+       
     }
 
 }
