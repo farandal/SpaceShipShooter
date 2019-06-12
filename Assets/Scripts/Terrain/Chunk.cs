@@ -36,6 +36,7 @@ public class Chunk
         meshGameObject.GetComponent<MeshFilter>().mesh = mesh;
         meshGameObject.GetComponent<MeshCollider>().sharedMesh = mesh;
         meshGameObject.GetComponent<MeshRenderer>().material = material;
+        meshGameObject.layer = 10;
     }
 
     void FillData()
