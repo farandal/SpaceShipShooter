@@ -8,6 +8,13 @@ public class Quat {
         this.y = y;
         this.z = z;
     }
+
+     public Quat(Quaternion q){
+        this.w = q.w;
+        this.x = q.x;
+        this.y = q.y;
+        this.z = q.z;
+    }
  
     public float Norm(){
         return Mathf.Sqrt (w * w + x * x + y * y + z * z);
