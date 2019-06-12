@@ -16,6 +16,11 @@ public class Plane : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+
+
+    
+
+
     }
 
     private void ImportPlane () {
@@ -46,11 +51,11 @@ public class Plane : MonoBehaviour {
         //playerContainer.transform.Translate (0f,playerAltitud, 0f);
 
         plane.transform.SetParent (gameObject.transform, false);
+        plane.transform.Rotate(correctionVector);
 
         Gizmo gizmo = gameObject.AddComponent<Gizmo> ();
-        gizmo.SetCorrectionVector (correctionVector);
-        gizmo.SetTarget (plane);
-        
+        gizmo.Config (plane,180f,correctionVector,new Vector3(1,1,1));
+
         GameObject buster1 = GameObject.Instantiate (GameObject.Find ("Particles/Burster")) as GameObject;
         GameObject buster2 = GameObject.Instantiate (GameObject.Find ("Particles/Burster")) as GameObject;
 
@@ -60,7 +65,7 @@ public class Plane : MonoBehaviour {
         weapon.transform.SetParent (plane.transform, false);
 
         weapon.AddComponent<PlaneWeapon> ();
-        weapon.transform.Translate (0f, 0f, 180f);
+        weapon.transform.Translate (0f, 0f,220f);
         weapon.transform.Rotate (new Vector3 (0f, 0f, 0f), Space.World);
 
         buster1.transform.Translate (-75f, -100f, 0f);
@@ -72,9 +77,7 @@ public class Plane : MonoBehaviour {
         buster1.transform.SetParent (plane.transform, false);
         buster2.transform.SetParent (plane.transform, false);
         plane.AddComponent<Pulse> ();
-    
 
-       
     }
 
 }

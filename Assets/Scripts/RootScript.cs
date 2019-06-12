@@ -5,13 +5,11 @@ public class AppState {
   public static AppState _instance;
   private GameObject mainCameraContainer;
   private GameObject hudCameraContainer;
-  public GameObject rootGameObject;
   private float cameradistance = 800f;
   private float cameraAltitud = 1000f;
-  private float playerAltitud = 1200;
+  private float playerAltitud = 2400;
   private float terrainScale = 10f;
   private float farClipPlane = 100000f;
-
 
   [RuntimeInitializeOnLoadMethod]
   static void OnRuntimeMethodLoad () {
@@ -74,13 +72,15 @@ public class AppState {
     mainCameraContainer.transform.position = new Vector3 (0f, cameraAltitud, -cameradistance);
 
     _cam2.transform.eulerAngles = new Vector3 (90.0f, _cam2.transform.eulerAngles.y, _cam2.transform.eulerAngles.z);
-    _cam2.transform.position = new Vector3 (0f, cameraAltitud-200, cameradistance/2);
+    _cam2.transform.position = new Vector3 (0f, cameraAltitud - 200, cameradistance / 2);
     _cam2.farClipPlane = farClipPlane;
 
-    _cam1.cullingMask = 1;
-    _cam2.cullingMask = 5 ;
-
-    _cam1.clearFlags = CameraClearFlags.Depth;
+    // Layers - Unity Editor, Project Settings , Tags & Layers
+    // 8 Player
+    // 9 Gizmo
+    // 10 Terrain
+    _cam1.LayerCullingHide ("Gizmo");
+    _cam2.LayerCullingHide ("Terrain");
     _cam2.clearFlags = CameraClearFlags.Depth;
 
   }
@@ -91,16 +91,11 @@ public class AppState {
     lightComp.color = Color.white;
     lightGameObject.transform.position = new Vector3 (0, 0, -10);
     //controllerContainer.AddComponent(typeof(GyroController));
-    //rootGameObject.AddComponent<Fog> ();
   }
 
   public void AppInit () {
 
     float scale = 3f;
-
-    rootGameObject = new GameObject {
-      name = "RootGameObject"
-    };
 
     this.InitCameras ();
     //this.SetupIllumination ();
@@ -109,11 +104,10 @@ public class AppState {
       name = "PlayerContainer"
     };
 
-    playerContainer.transform.SetParent (rootGameObject.transform, false);
-    playerContainer.AddComponent<PlayerMovement> ();
     playerContainer.AddComponent<Plane> ();
+
     playerContainer.transform.position = new Vector3 (0f, playerAltitud, 0f);
-    playerContainer.transform.Translate (0f,playerAltitud, 0f);
+    playerContainer.layer = 8;
 
     GameObject world = new GameObject {
       name = "World"
@@ -121,14 +115,12 @@ public class AppState {
 
     World terrain = world.AddComponent<World> ();
     terrain.SetScaleFactor (100f);
-    world.transform.SetParent (rootGameObject.transform, false);
-    world.layer = 6;
 
     SmoothFollow followCam1 = this.mainCameraContainer.AddComponent<SmoothFollow> () as SmoothFollow;
     SmoothFollow followCam2 = this.hudCameraContainer.AddComponent<SmoothFollow> () as SmoothFollow;
-  
-    followCam1.SetTarget(playerContainer);
-    followCam2.SetTarget(playerContainer);
+
+    followCam1.SetTarget (playerContainer);
+    followCam2.SetTarget (playerContainer);
     terrain.SetPlayer (playerContainer);
 
   }

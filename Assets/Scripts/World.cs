@@ -31,6 +31,7 @@ public class World : MonoBehaviour {
     void Start () {
         material = Resources.Load ("Materials/TerrainTexture", typeof (Material)) as Material;
         gameObject.transform.localScale = this.scaleFactorVector;
+        gameObject.layer = 10;
         SetupTerrain ();
         //Gizmo gizmo = gameObject.AddComponent<Gizmo> ();
         //gizmo.SetTarget (gameObject);
