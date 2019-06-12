@@ -1,27 +1,45 @@
+
+using System;
 using UnityEngine;
-using System.Collections;
-
 public class PlayerMovement : MonoBehaviour {
-    private float factor = 1000f;
-	// Use this for initialization
-	void Start () {
-     
-	}
 
-    void Update()
-    {
-       // movementValue = Input.GetAxis("Vertical");
-       // turnValue = Input.GetAxis("Horizontal");
+    float timeZeroToMax = 5f;
+    float acceleration;
+    public float velocity;
+    public float maxSpeed = 10f;
+     public float minSpeed = 0f;
+    private int direction = 0;
 
-        if (Input.GetKey("up"))
-        {
-             transform.Translate(Vector3.forward * factor * Time.deltaTime);
+    void Awake () {
+        acceleration = maxSpeed / timeZeroToMax;
+        velocity = 0f;
+    }
+
+    void Update () {
+
+        if (Input.GetKeyDown (KeyCode.DownArrow)) {
+            this.direction = -1;
         }
 
-        if (Input.GetKey("down"))
-        {
-             transform.Translate(Vector3.back * factor * Time.deltaTime);
+        if (Input.GetKeyDown (KeyCode.UpArrow)) {
+            this.direction = 1;
         }
+
+        if (Input.GetKey (KeyCode.UpArrow) || Input.GetKey (KeyCode.DownArrow)) {
+            velocity += direction * acceleration * Time.deltaTime;
+        }
+
+        if (Input.GetKey (KeyCode.UpArrow)) {
+            velocity += acceleration * Time.deltaTime;
+        }
+
+        if (!Input.anyKey) {
+
+            velocity = velocity < 0 ? velocity + (acceleration * Time.deltaTime) : velocity - (acceleration * Time.deltaTime);
+        }
+
+        velocity = Mathf.Clamp (velocity, minSpeed, maxSpeed);
+        transform.Translate(Vector3.forward * (velocity));
 
     }
 

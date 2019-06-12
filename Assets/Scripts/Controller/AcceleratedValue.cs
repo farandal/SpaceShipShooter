@@ -6,10 +6,14 @@ public class AcceleratedValue : MonoBehaviour {
     float timeZeroToMax = 1f;
     float acceleration;
     public float velocity;
+    public Vector3 angle;
+    public Quaternion rotation;
     float maxSpeed = 1f;
     private int orientation;
     private int axis;
     private Vector3 orientationVector;
+
+    private float rotationAxis;
 
     public enum Orientation {
         Roll = 0,
@@ -25,7 +29,8 @@ public class AcceleratedValue : MonoBehaviour {
 
     void Awake () {
         acceleration = maxSpeed / timeZeroToMax;
-        velocity = 0.0f;
+        velocity = 0f;
+       
     }
 
     public void config (Orientation orientation, Axis axis) {
@@ -37,17 +42,20 @@ public class AcceleratedValue : MonoBehaviour {
 
             case Axis.x:
                 {
-                    this.orientationVector = new Vector3 (1, 0, 0);
+                    this.orientationVector = new Vector3 (-1, 0, 0);
+
                     break;
                 }
             case Axis.y:
                 {
                     this.orientationVector = new Vector3 (0, 1, 0);
+
                     break;
                 }
             case Axis.z:
                 {
                     this.orientationVector = new Vector3 (0, 0, 1);
+
                     break;
                 }
 
@@ -56,9 +64,8 @@ public class AcceleratedValue : MonoBehaviour {
     }
 
     void Update () {
-
+        
         if (orientation == (int) Orientation.Roll) {
-
             if (Input.GetKey (KeyCode.LeftArrow)) {
                 velocity -= acceleration * Time.deltaTime;
             }
@@ -105,9 +112,8 @@ public class AcceleratedValue : MonoBehaviour {
         }
 
         velocity = Mathf.Clamp (velocity, -maxSpeed, maxSpeed);
-        transform.Rotate (orientationVector * velocity);
-
-
+        //transform.Rotate (orientationVector * velocity);
+        
     }
 
 }
