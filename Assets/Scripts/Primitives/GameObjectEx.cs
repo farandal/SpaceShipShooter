@@ -2,6 +2,27 @@ using UnityEngine;
 
 public static class GameObjectEx
 {
+
+    public static void DrawLine(this GameObject container, Vector3 destPoint,Color color, float startWidth = 1f, float endWidth = 1f ) {
+        
+            var line = container.AddComponent<LineRenderer>();
+            
+            line.useWorldSpace = false;
+            line.startWidth = startWidth;
+            line.endWidth =endWidth;
+            line.transform.SetParent(container.transform,false);
+            line.material = new Material(Shader.Find("Mobile/Particles/Additive"));
+            line.SetColors(color, color);
+
+            var points = new Vector3[2];
+            
+            points[0] = new Vector3(0,0,0);
+            points[1] = destPoint;
+
+            line.SetPositions(points);
+
+    }
+
     public static void DrawCircle(this GameObject container, float radius, float lineWidth, Color color, Vector3 rotation)
     {
 
