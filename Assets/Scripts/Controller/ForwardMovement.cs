@@ -18,12 +18,9 @@ public class ForwardMovement {
     }
 
     public static void Process (float velocity) {
-
         velocity = Mathf.Clamp (velocity, ForwardMovement.minSpeed, ForwardMovement.maxSpeed);
-       
         Debug.Log ("ForwardMovement: " + velocity);
-        ForwardMovement.target.transform.Translate (ForwardMovement.orientation * (velocity));
-
+        ForwardMovement.target.transform.position = new Vector3(ForwardMovement.target.transform.position.x ,ForwardMovement.target.transform.position.y,ForwardMovement.target.transform.position.z + velocity );
     }
 
 }
