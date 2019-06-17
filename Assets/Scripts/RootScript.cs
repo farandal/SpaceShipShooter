@@ -105,9 +105,15 @@ public class AppState {
     };
 
     playerContainer.AddComponent<Plane> ();
-
     playerContainer.transform.position = new Vector3 (0f, playerAltitud, 0f);
     playerContainer.layer = 8;
+
+    GameObject enemies = new GameObject {
+      name = "Enemies"
+    };
+
+    DynamicObject enemy = enemies.AddComponent<DynamicObject> ();
+    enemy.Setup("enemy","Assets/Resources/shootingBall/shootingBall.obj",new Vector3(-90f,0f,0f),new Vector3(0f,playerAltitud,5000f),ref playerContainer,10);
 
     GameObject world = new GameObject {
       name = "World"
