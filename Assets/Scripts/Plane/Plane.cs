@@ -51,18 +51,18 @@ public class Plane : MonoBehaviour {
         //playerContainer.transform.Translate (0f,playerAltitud, 0f);
 
         plane.transform.SetParent (gameObject.transform, false);
-        plane.transform.Rotate(correctionVector);
+        //plane.transform.Rotate(correctionVector);
 
         Gizmo gizmo = gameObject.AddComponent<Gizmo> ();
-        gizmo.Config (plane,180f,correctionVector,new Vector3(1,1,1));
+        gizmo.Config (gameObject,180f,correctionVector,new Vector3(1,1,1));
 
         GameObject buster1 = GameObject.Instantiate (GameObject.Find ("Particles/Burster")) as GameObject;
         GameObject buster2 = GameObject.Instantiate (GameObject.Find ("Particles/Burster")) as GameObject;
 
-        plane.AddComponent<PlaneLaser> ();
+        gameObject.AddComponent<PlaneLaser> ();
 
         GameObject weapon = GameObject.Instantiate (GameObject.Find ("Particles/Weapon")) as GameObject;
-        weapon.transform.SetParent (plane.transform, false);
+        weapon.transform.SetParent (gameObject.transform, false);
 
         weapon.AddComponent<PlaneWeapon> ();
         weapon.transform.Translate (0f, 0f,220f);
@@ -74,9 +74,9 @@ public class Plane : MonoBehaviour {
         buster1.transform.Rotate (correctionVector, Space.Self);
         buster2.transform.Rotate (correctionVector, Space.Self);
 
-        buster1.transform.SetParent (plane.transform, false);
-        buster2.transform.SetParent (plane.transform, false);
-        plane.AddComponent<Pulse> ();
+        buster1.transform.SetParent (gameObject.transform, false);
+        buster2.transform.SetParent (gameObject.transform, false);
+        gameObject.AddComponent<Pulse> ();
 
     }
 
